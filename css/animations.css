@@ -1,0 +1,315 @@
+:root {
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::selection {
+  background: #fcd8ca;
+  color: #00353b;
+}
+
+.hero-copy h1 {
+  animation: rise-in 800ms var(--motion-ease) both;
+}
+
+.hero-copy>p {
+  animation: fade-in 900ms ease-in-out both;
+}
+
+.hero-copy>p::first-line {
+  color: #fcd8ca;
+}
+
+.hero-art>.picture {
+  animation: sharpen-in 1s ease-out both;
+}
+
+.rating {
+  animation: slide-in 900ms var(--motion-ease) both;
+}
+
+.button {
+  position: relative;
+  overflow: hidden;
+  transition: background-color 250ms ease, border-color 250ms ease, transform 180ms ease;
+}
+
+.button:active {
+  transform: scale(0.95);
+}
+
+.button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, #ffffff55 50%, transparent 70%);
+  transform: translateX(-110%);
+  pointer-events: none;
+}
+
+.button:focus-visible::after {
+  animation: shine 650ms ease-out;
+}
+
+:is(a, button, input, .reviews):focus-visible {
+  outline: 3px solid #d29b11;
+  outline-offset: 4px;
+}
+
+.nav-list a {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-list a::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #fcd8ca;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms var(--motion-ease);
+}
+
+.nav-list a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.course-card {
+  transition: transform 350ms var(--motion-ease), box-shadow 350ms ease;
+}
+
+.course-card:focus-within {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 20px #00353b26;
+}
+
+.course-card>.picture {
+  transition: transform 450ms var(--motion-ease);
+}
+
+.course-card:focus-within>.picture {
+  transform: scale(1.06);
+}
+
+.post>.picture {
+  transition: filter 400ms ease;
+}
+
+.post:focus-within>.picture {
+  filter: saturate(1.45);
+}
+
+.read-more .material-icons {
+  transition: transform 250ms ease;
+}
+
+.read-more:focus-visible .material-icons {
+  transform: translateX(4px);
+}
+
+.review-text::first-letter {
+  color: #158e5e;
+  font-weight: 700;
+}
+
+.review {
+  transition: background-color 300ms ease;
+}
+
+.review:nth-child(even) {
+  background: #f5faf8;
+}
+
+.newsletter form {
+  position: relative;
+}
+
+.newsletter form::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #fcd8ca;
+  transition: width 450ms var(--motion-ease);
+}
+
+.newsletter form:focus-within::before {
+  width: 100%;
+}
+
+.newsletter input {
+  transition: border-color 250ms ease, box-shadow 250ms ease;
+}
+
+.newsletter input::placeholder {
+  color: #64748b;
+  opacity: 1;
+}
+
+.newsletter input:focus {
+  box-shadow: 0 0 0 4px #fcd8ca40;
+}
+
+.newsletter input:valid:not(:placeholder-shown) {
+  border-color: #22a45a;
+}
+
+.newsletter input:invalid:not(:placeholder-shown) {
+  border-color: #c2410c;
+}
+
+.socials a {
+  transition: transform 300ms var(--motion-ease);
+}
+
+.socials a:focus-visible {
+  transform: rotate(-10deg);
+}
+
+.announcement-close .material-icons {
+  transition: transform 300ms ease;
+}
+
+.announcement-close:focus-visible .material-icons {
+  transform: rotate(90deg);
+}
+
+section:target h2 {
+  animation: target-color 1.2s ease-in-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover::after {
+    animation: shine 650ms ease-out;
+  }
+
+  .nav-list a:hover {
+    text-decoration: none;
+  }
+
+  .nav-list a:hover::after {
+    transform: scaleX(1);
+  }
+
+  .course-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 20px #00353b26;
+  }
+
+  .course-card:hover>.picture {
+    transform: scale(1.06);
+  }
+
+  .post:hover>.picture {
+    filter: saturate(1.45);
+  }
+
+  .read-more:hover .material-icons {
+    transform: translateX(4px);
+  }
+
+  .review:hover {
+    background: #fff8ed;
+  }
+
+  .socials a:hover {
+    transform: rotate(-10deg);
+  }
+
+  .announcement-close:hover .material-icons {
+    transform: rotate(90deg);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--intro-y, 20px));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sharpen-in {
+  from {
+    opacity: 0;
+    filter: blur(var(--intro-blur, 8px));
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--intro-x, -12px));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shine {
+  to {
+    transform: translateX(110%);
+  }
+}
+
+@keyframes target-color {
+  50% {
+    color: #158e5e;
+  }
+}
+
+@media (max-width: 767.98px),
+(pointer: coarse) {
+
+  .hero-copy h1,
+  .hero-copy>p,
+  .hero-art>.picture,
+  .rating {
+    --intro-x: 0px;
+    --intro-y: 0px;
+    --intro-blur: 0px;
+  }
+
+  .course-card:focus-within,
+  .course-card:focus-within>.picture,
+  .socials a:focus-visible {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
