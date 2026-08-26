@@ -1,0 +1,10 @@
+{
+  "name": "learnico-lab-10",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "server": "node server/index.mjs",
+    "test": "node --test tests/api.test.mjs tests/storage.test.mjs"
+  },
+  "devDependencies": { "json-server": "0.17.4" }
+}
