@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your cart — Learnico</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/catalog.css">
+  <link rel="stylesheet" href="css/shop.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <script type="module" src="js/navigation.js"></script>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Poppins:wght@400&amp;display=optional">
+  <script type="module" src="js/collection-page.js"></script>
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/interactions.css">
+  <script src="js/preferences-init.js"></script>
+  <link rel="stylesheet" href="css/preferences.css">
+</head>
+
+<body class="catalog-page" data-collection="cart">
+  <a class="skip-link" href="#collection-main">Skip to cart</a>
+  <header class="catalog-header">
+    <div class="container catalog-nav">
+      <a class="catalog-logo" href="index.html">Learnico</a>
+      <nav aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="catalog.html">Courses</a>
+        <a href="favorites.html">Favorites</a>
+        <a href="cart.html" aria-current="page">Cart</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="account.html">Account</a>
+        <a href="admin.html" data-admin-link hidden>Admin</a>
+      </nav>
+    </div>
+  </header>
+  <main id="collection-main" class="container">
+    <section class="catalog-intro">
+      <span class="tag">Keep learning</span>
+      <h1>Your cart</h1>
+      <p>Review your courses and choose the number of learning seats.</p>
+    </section>
+    <p id="notice" class="shop-notice" role="status" aria-live="polite"></p>
+    <div id="server-error" class="shop-error" role="alert" hidden>
+      <p id="error-message"></p>
+      <button id="retry" type="button" class="button">Try again</button>
+    </div>
+    <div class="catalog-results-bar">
+      <p id="collection-status" role="status" aria-live="polite"></p>
+      <a class="button" href="catalog.html">Explore courses</a>
+    </div>
+    <div id="collection-grid" class="catalog-grid" aria-busy="true"></div>
+    <div id="empty-state" class="catalog-empty" hidden>
+      <h2>Your cart is empty</h2>
+      <p>Explore the catalog to add your first course.</p>
+    </div>
+    <section class="cart-summary" aria-label="Order summary">
+      <strong>Total: <span id="cart-total" aria-live="polite">—</span></strong>
+      <button id="checkout" type="button" class="button button-green" disabled>Complete purchase</button>
+      <p>This is a demo checkout. No payment details or real payment are required.</p>
+    </section>
+    <noscript>
+      <p class="catalog-empty">Enable JavaScript to load your cart.</p>
+    </noscript>
+  </main>
+  <footer class="catalog-footer container">
+    <p>Learnico · Build skills at your own pace.</p><a href="index.html">Back to home</a>
+  </footer>
+</body>
+
+</html>
