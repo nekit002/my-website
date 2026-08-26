@@ -1,0 +1,199 @@
+{
+  "courses": [
+    {
+      "id": 1,
+      "title": "Webflow Basics",
+      "description": "Build your first responsive website without writing code.",
+      "category": "Webflow",
+      "price": 24,
+      "rating": 4.8,
+      "duration": 6,
+      "level": "Beginner",
+      "image": "images/course-1.png"
+    },
+    {
+      "id": 2,
+      "title": "Webflow Interactions",
+      "description": "Create transitions and engaging scroll animations.",
+      "category": "Webflow",
+      "price": 55,
+      "rating": 4.9,
+      "duration": 10,
+      "level": "Intermediate",
+      "image": "images/course-2.png"
+    },
+    {
+      "id": 3,
+      "title": "Advanced CMS",
+      "description": "Design collections and dynamic content in Webflow.",
+      "category": "Webflow",
+      "price": 38,
+      "rating": 4.7,
+      "duration": 8,
+      "level": "Advanced",
+      "image": "images/course-3.png"
+    },
+    {
+      "id": 4,
+      "title": "Figma Foundations",
+      "description": "Learn frames, components and collaborative interface design.",
+      "category": "Design",
+      "price": 29,
+      "rating": 4.8,
+      "duration": 7,
+      "level": "Beginner",
+      "image": "images/blog-2.png"
+    },
+    {
+      "id": 5,
+      "title": "Design Systems",
+      "description": "Create reusable components and consistent visual guidelines.",
+      "category": "Design",
+      "price": 65,
+      "rating": 4.9,
+      "duration": 12,
+      "level": "Advanced",
+      "image": "images/course-2.png"
+    },
+    {
+      "id": 6,
+      "title": "Mobile UX",
+      "description": "Design accessible mobile journeys and test prototypes.",
+      "category": "Design",
+      "price": 42,
+      "rating": 4.6,
+      "duration": 9,
+      "level": "Intermediate",
+      "image": "images/blog-1.png"
+    },
+    {
+      "id": 7,
+      "title": "Zapier Essentials",
+      "description": "Connect everyday tools and automate repetitive tasks.",
+      "category": "Automation",
+      "price": 19,
+      "rating": 4.5,
+      "duration": 4,
+      "level": "Beginner",
+      "image": "images/course-1.png"
+    },
+    {
+      "id": 8,
+      "title": "Make Workflows",
+      "description": "Build visual automation scenarios with filters and routers.",
+      "category": "Automation",
+      "price": 49,
+      "rating": 4.8,
+      "duration": 8,
+      "level": "Intermediate",
+      "image": "images/course-3.png"
+    },
+    {
+      "id": 9,
+      "title": "Airtable Projects",
+      "description": "Organize project data and create automated team dashboards.",
+      "category": "Automation",
+      "price": 35,
+      "rating": 4.7,
+      "duration": 6,
+      "level": "Beginner",
+      "image": "images/blog-2.png"
+    },
+    {
+      "id": 10,
+      "title": "SEO for Creators",
+      "description": "Improve website structure and help people discover your work.",
+      "category": "Marketing",
+      "price": 27,
+      "rating": 4.6,
+      "duration": 5,
+      "level": "Beginner",
+      "image": "images/blog-3.png"
+    },
+    {
+      "id": 11,
+      "title": "Content Strategy",
+      "description": "Plan useful content around customer needs and clear goals.",
+      "category": "Marketing",
+      "price": 39,
+      "rating": 4.8,
+      "duration": 7,
+      "level": "Intermediate",
+      "image": "images/blog-1.png"
+    },
+    {
+      "id": 12,
+      "title": "Email Campaigns",
+      "description": "Create email sequences and measure campaign performance.",
+      "category": "Marketing",
+      "price": 32,
+      "rating": 4.5,
+      "duration": 5,
+      "level": "Beginner",
+      "image": "images/course-2.png"
+    },
+    {
+      "id": 13,
+      "title": "Bubble Foundations",
+      "description": "Launch a no-code application with users and a database.",
+      "category": "App building",
+      "price": 59,
+      "rating": 4.7,
+      "duration": 11,
+      "level": "Beginner",
+      "image": "images/course-3.png"
+    },
+    {
+      "id": 14,
+      "title": "Glide Apps",
+      "description": "Turn spreadsheets into practical mobile applications.",
+      "category": "App building",
+      "price": 34,
+      "rating": 4.6,
+      "duration": 6,
+      "level": "Beginner",
+      "image": "images/course-1.png"
+    },
+    {
+      "id": 15,
+      "title": "No-code MVP",
+      "description": "Prototype, validate and launch a product for real users.",
+      "category": "App building",
+      "price": 79,
+      "rating": 5,
+      "duration": 14,
+      "level": "Advanced",
+      "image": "images/blog-3.png"
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "Webflow"
+    },
+    {
+      "id": 2,
+      "name": "Design"
+    },
+    {
+      "id": 3,
+      "name": "Automation"
+    },
+    {
+      "id": 4,
+      "name": "Marketing"
+    },
+    {
+      "id": 5,
+      "name": "App building"
+    }
+  ],
+  "favorites": [],
+  "cart": [],
+  "users": [],
+  "feedback": [],
+  "orders": [],
+  "meta": {
+    "nextCourseId": 16
+  }
+}
