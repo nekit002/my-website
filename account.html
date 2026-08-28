@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your learning account — Learnico</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/catalog.css">
+  <link rel="stylesheet" href="css/shop.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <script type="module" src="js/navigation.js"></script>
+  <script type="module" src="js/account-page.js"></script>
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/interactions.css">
+  <script src="js/preferences-init.js"></script>
+  <link rel="stylesheet" href="css/preferences.css">
+</head>
+
+<body class="catalog-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="catalog-header">
+    <div class="container catalog-nav">
+      <a class="catalog-logo" href="index.html">Learnico</a>
+      <nav aria-label="Main navigation">
+        <a href="index.html">Home</a><a href="catalog.html">Courses</a><a href="favorites.html">Favorites</a><a
+          href="cart.html">Cart</a><a href="reviews.html">Reviews</a><a href="account.html"
+          aria-current="page">Account</a><a href="admin.html" data-admin-link hidden>Admin</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="container">
+    <section class="catalog-intro"><span class="tag">Keep learning</span>
+      <h1>Your learning account</h1>
+      <p>Register, sign in and view your purchase history.</p>
+    </section>
+    <p data-session-status></p>
+    <p id="notice" class="shop-notice" role="status" aria-live="polite"></p>
+    <button id="logout" class="button" type="button" hidden>Sign out</button>
+    <section id="account-summary" class="form-panel" hidden>
+      <h2>Your purchases</h2>
+      <div id="orders" class="review-list"></div><a class="button button-green" href="reviews.html">Review a purchased
+        course</a>
+    </section>
+    <div id="account-forms" class="account-layout">
+      <section class="form-panel">
+        <h2>Create an account</h2>
+        <p>Required fields are marked *. Use fictitious data for this local laboratory.</p>
+        <form id="register-form" novalidate>
+          <div class="form-grid">
+            <div class="form-field"><label for="register-firstName">First name *</label><input id="register-firstName"
+                name="firstName" type="text" required maxlength="60" autocomplete="given-name"
+                aria-describedby="register-firstName-error">
+              <p class="field-error" id="register-firstName-error" data-error="firstName" aria-live="polite"></p>
+            </div>
+            <div class="form-field"><label for="register-lastName">Last name *</label><input id="register-lastName"
+                name="lastName" type="text" required maxlength="60" autocomplete="family-name"
+                aria-describedby="register-lastName-error">
+              <p class="field-error" id="register-lastName-error" data-error="lastName" aria-live="polite"></p>
+            </div>
+            <div class="form-field"><label for="register-middleName">Middle name (optional)</label><input
+                id="register-middleName" name="middleName" type="text" maxlength="60" autocomplete="additional-name"
+                aria-describedby="register-middleName-error">
+              <p class="field-error" id="register-middleName-error" data-error="middleName" aria-live="polite"></p>
+            </div>
+            <div class="form-field"><label for="register-birthDate">Date of birth *</label><input
+                id="register-birthDate" name="birthDate" type="date" required autocomplete="bday"
+                aria-describedby="register-birthDate-error">
+              <p class="field-error" id="register-birthDate-error" data-error="birthDate" aria-live="polite"></p>
+            </div>
+            <div class="form-field"><label for="register-phone">Belarus phone *</label><input id="register-phone"
+                name="phone" type="tel" required maxlength="25" placeholder="+375 29 123-45-67" autocomplete="tel"
+                aria-describedby="register-phone-error">
+              <p class="field-error" id="register-phone-error" data-error="phone" aria-live="polite"></p>
+            </div>
+            <div class="form-field"><label for="register-email">Email *</label><input id="register-email" name="email"
+                type="email" required maxlength="254" autocomplete="email" aria-describedby="register-email-error">
+              <p class="field-error" id="register-email-error" data-error="email" aria-live="polite"></p>
+            </div>
+            <div class="form-field"><label for="register-passwordMode">Create password *</label><select
+                id="register-passwordMode" name="passwordMode" required aria-describedby="register-passwordMode-error">
+                <option value="manual">Choose myself</option>
+                <option value="generated">Generate automatically</option>
+              </select>
+              <p class="field-error" id="register-passwordMode-error" data-error="passwordMode" aria-live="polite"></p>
+            </div>
+            <div class="form-field"><label for="register-password">Password *</label><input id="register-password"
+                name="password" type="password" required minlength="8" maxlength="20" autocomplete="new-password"
+                aria-describedby="register-password-error">
+              <p class="field-error" id="register-password-error" data-error="password" aria-live="polite"></p>
+            </div>
+            <div class="full-width form-actions"><button id="generate-password" class="button" type="button"
+                hidden>Generate another password</button><button id="show-password" class="button" type="button"
+                aria-pressed="false">Show password</button></div>
+            <p class="form-hint full-width">8–20 characters: uppercase and lowercase Latin letters, a digit and a
+              special character. Common passwords from the 2024 list are blocked.</p>
+            <div id="confirmation-field" class="full-width">
+              <div class="form-field"><label for="register-confirmPassword">Repeat password without pasting
+                  *</label><input id="register-confirmPassword" name="confirmPassword" type="password" required
+                  maxlength="20" autocomplete="new-password" aria-describedby="register-confirmPassword-error">
+                <p class="field-error" id="register-confirmPassword-error" data-error="confirmPassword"
+                  aria-live="polite"></p>
+              </div>
+            </div>
+            <div id="generated-confirmation" class="full-width" hidden><label class="check-label"><input
+                  name="savedPassword" type="checkbox" disabled required>I have saved my generated password *</label>
+              <p class="field-error" data-error="savedPassword"></p>
+            </div>
+            <div class="form-field"><label for="register-nickname">Nickname *</label><input id="register-nickname"
+                name="nickname" type="text" required minlength="3" maxlength="30" readonly autocomplete="username"
+                aria-describedby="register-nickname-error">
+              <p class="field-error" id="register-nickname-error" data-error="nickname" aria-live="polite"></p>
+            </div>
+            <div class="nickname-actions"><button id="generate-nickname" class="button" type="button">Generate
+                nickname</button>
+              <p id="nickname-status" class="form-hint" aria-live="polite">Enter your first and last name. After 5
+                generations, you can edit the nickname.</p>
+            </div>
+            <section id="agreement" class="full-width"><button id="agreement-toggle" class="button agreement-toggle"
+                type="button" aria-controls="agreement-text" aria-expanded="false">Read the user agreement *</button>
+              <div id="agreement-text" class="agreement-text" tabindex="0" hidden role="region"
+                aria-label="User agreement">
+                <h3>Learnico laboratory agreement</h3>
+                <p>Version 2026-09. This is an educational local website demonstrating forms and server requests, not a
+                  real commercial service.</p>
+                <p>Use fictitious names, a test email and a test Belarus phone number. Do not enter your real personal
+                  data or reuse a password from another account.</p>
+                <p>Registration is available to people aged 16 or older. Choose an appropriate nickname and keep your
+                  demonstration credentials available while testing the application.</p>
+                <p>Courses, prices, purchases and orders are demonstration data. Completing checkout records a test
+                  order and clears the cart. It does not process a payment or provide a real paid course.</p>
+                <p>Reviews must describe a course purchased by the same account. Write at least 20 characters, stay
+                  respectful and do not include personal or confidential information.</p>
+                <p>Administrators manage the demonstration catalog and moderate reviews. They cannot post customer
+                  reviews. Course changes do not change the price recorded in an existing order.</p>
+                <p>Your demonstration information is stored in the local JSON database. The project owner can inspect or
+                  reset this local data. The application is not intended for public deployment.</p>
+                <p id="agreement-end">End of agreement. You may now confirm that you have read and accept these
+                  demonstration conditions.</p>
+              </div>
+            </section>
+            <div class="full-width"><label class="check-label"><input id="accepted-terms" name="acceptedTerms"
+                  type="checkbox" required disabled aria-describedby="terms-help terms-error">I have read and accept the
+                agreement *</label>
+              <p id="terms-help" class="form-hint">Open the agreement and read to the end to enable this checkbox.</p>
+              <p id="terms-error" class="field-error" data-error="acceptedTerms"></p>
+            </div>
+          </div>
+          <button class="button button-green" type="submit" disabled>Register</button>
+        </form>
+      </section>
+      <section class="form-panel">
+        <h2>Sign in</h2>
+        <form id="login-form" novalidate>
+          <div class="form-field"><label for="login-email">Email *</label><input id="login-email" name="email"
+              type="email" required autocomplete="email" aria-describedby="login-email-error">
+            <p class="field-error" id="login-email-error" data-error="email" aria-live="polite"></p>
+          </div>
+          <div class="form-field"><label for="login-password">Password *</label><input id="login-password"
+              name="password" type="password" required maxlength="20" autocomplete="current-password"
+              aria-describedby="login-password-error">
+            <p class="field-error" id="login-password-error" data-error="password" aria-live="polite"></p>
+          </div>
+          <button class="button button-green" type="submit" disabled>Sign in</button>
+        </form>
+      </section>
+    </div>
+    <noscript>
+      <p class="catalog-empty">Enable JavaScript to use these forms.</p>
+    </noscript>
+  </main>
+  <footer class="catalog-footer container">
+    <p>Learnico · Build skills at your own pace.</p><a href="catalog.html">Explore courses</a>
+  </footer>
+</body>
+
+</html>
