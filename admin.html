@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration — Learnico</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/catalog.css">
+  <link rel="stylesheet" href="css/shop.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <script type="module" src="js/navigation.js"></script>
+  <script type="module" src="js/admin-page.js"></script>
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/interactions.css">
+  <script src="js/preferences-init.js"></script>
+  <link rel="stylesheet" href="css/preferences.css">
+</head>
+
+<body class="catalog-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="catalog-header">
+    <div class="container catalog-nav">
+      <a class="catalog-logo" href="index.html">Learnico</a>
+      <nav aria-label="Main navigation">
+        <a href="index.html">Home</a><a href="catalog.html">Courses</a><a href="favorites.html">Favorites</a><a
+          href="cart.html">Cart</a><a href="reviews.html">Reviews</a><a href="account.html">Account</a><a
+          href="admin.html" data-admin-link hidden aria-current="page">Admin</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="container">
+    <section class="catalog-intro"><span class="tag">Keep learning</span>
+      <h1>Administration</h1>
+      <p>Manage the course catalog and moderate customer reviews.</p>
+    </section>
+    <p data-session-status></p>
+    <p id="notice" class="shop-notice" role="status" aria-live="polite"></p>
+    <div id="admin-panel" hidden>
+      <button id="open-course-dialog" class="button button-green" type="button">Manage courses</button>
+      <dialog id="course-dialog" class="course-dialog" aria-labelledby="course-dialog-title">
+        <div class="course-dialog-inner"><button id="close-course-dialog" class="dialog-close" type="button"
+            aria-label="Close course form">×</button>
+          <section class="form-panel">
+            <h2 id="course-dialog-title">Manage courses</h2>
+            <p>Required fields are marked *. Choose an existing course to edit or delete it.</p>
+            <label for="edit-course">Course</label><select id="edit-course">
+              <option value="">Add a new course</option>
+            </select>
+            <form id="course-form" novalidate>
+              <div class="form-grid">
+                <div class="form-field"><label for="course-title">Title *</label><input id="course-title" name="title"
+                    type="text" required minlength="3" maxlength="100" aria-describedby="course-title-error">
+                  <p class="field-error" id="course-title-error" data-error="title" aria-live="polite"></p>
+                </div>
+                <div class="form-field"><label for="course-category">Category *</label><input id="course-category"
+                    name="category" type="text" required minlength="2" maxlength="60" list="category-names"
+                    aria-describedby="course-category-error">
+                  <p class="field-error" id="course-category-error" data-error="category" aria-live="polite"></p>
+                </div>
+                <div class="form-field full-width"><label for="course-description">Description *</label><textarea
+                    id="course-description" name="description" required minlength="10" maxlength="1000" rows="4"
+                    aria-describedby="course-description-error"></textarea>
+                  <p class="field-error" id="course-description-error" data-error="description" aria-live="polite"></p>
+                </div>
+                <div class="form-field"><label for="course-price">Price ($) *</label><input id="course-price"
+                    name="price" type="number" required min="0" max="100000" step="0.01"
+                    aria-describedby="course-price-error">
+                  <p class="field-error" id="course-price-error" data-error="price" aria-live="polite"></p>
+                </div>
+                <div class="form-field"><label for="course-duration">Duration (hours) *</label><input
+                    id="course-duration" name="duration" type="number" required min="1" max="1000" step="1"
+                    aria-describedby="course-duration-error">
+                  <p class="field-error" id="course-duration-error" data-error="duration" aria-live="polite"></p>
+                </div>
+                <div class="form-field"><label for="course-rating">Rating *</label><input id="course-rating"
+                    name="rating" type="number" required min="0" max="5" step="0.1"
+                    aria-describedby="course-rating-error">
+                  <p class="field-error" id="course-rating-error" data-error="rating" aria-live="polite"></p>
+                </div>
+                <div class="form-field"><label for="course-level">Level *</label><select id="course-level" name="level"
+                    required aria-describedby="course-level-error">
+                    <option value="">Select a level</option>
+                    <option>Beginner</option>
+                    <option>Intermediate</option>
+                    <option>Advanced</option>
+                  </select>
+                  <p class="field-error" id="course-level-error" data-error="level" aria-live="polite"></p>
+                </div>
+                <div class="form-field"><label for="course-image">Image path or HTTPS URL *</label><input
+                    id="course-image" name="image" type="text" required placeholder="images/course-1.png"
+                    aria-describedby="course-image-error">
+                  <p class="field-error" id="course-image-error" data-error="image" aria-live="polite"></p>
+                </div>
+              </div><datalist id="category-names"></datalist><button id="save-course" class="button button-green"
+                type="submit" disabled>Add course</button>
+            </form>
+            <form id="delete-course-form" class="danger-zone" novalidate><label class="check-label"><input
+                  name="confirmed" type="checkbox" required>I confirm deletion of the selected course *</label>
+              <p class="field-error" data-error="confirmed"></p><button class="button" type="submit" disabled>Delete
+                selected course</button>
+            </form>
+          </section>
+        </div>
+      </dialog>
+      <section class="form-panel">
+        <h2>Moderate reviews</h2>
+        <div class="form-grid">
+          <div class="form-field"><label for="filter-course">By course</label><select id="filter-course">
+              <option value="">All courses</option>
+            </select></div>
+          <div class="form-field"><label for="filter-user">By user</label><select id="filter-user">
+              <option value="">All users</option>
+            </select></div>
+        </div>
+        <p id="moderation-status" role="status"></p><button id="retry-reviews" class="button" type="button">Refresh
+          reviews</button>
+        <div id="review-list" class="review-list"></div>
+      </section>
+    </div><a href="account.html">Go to your account</a>
+    <noscript>
+      <p class="catalog-empty">Enable JavaScript to use these forms.</p>
+    </noscript>
+  </main>
+  <footer class="catalog-footer container">
+    <p>Learnico · Build skills at your own pace.</p><a href="catalog.html">Explore courses</a>
+  </footer>
+</body>
+
+</html>
