@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course reviews — Learnico</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/catalog.css">
+  <link rel="stylesheet" href="css/shop.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <script type="module" src="js/navigation.js"></script>
+  <script type="module" src="js/reviews-page.js"></script>
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/interactions.css">
+  <script src="js/preferences-init.js"></script>
+  <link rel="stylesheet" href="css/preferences.css">
+</head>
+
+<body class="catalog-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="catalog-header">
+    <div class="container catalog-nav">
+      <a class="catalog-logo" href="index.html">Learnico</a>
+      <nav aria-label="Main navigation">
+        <a href="index.html">Home</a><a href="catalog.html">Courses</a><a href="favorites.html">Favorites</a><a
+          href="cart.html">Cart</a><a href="reviews.html" aria-current="page">Reviews</a><a
+          href="account.html">Account</a><a href="admin.html" data-admin-link hidden>Admin</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="container">
+    <section class="catalog-intro"><span class="tag">Keep learning</span>
+      <h1>Course reviews</h1>
+      <p>Tell other learners what you learned.</p>
+    </section>
+    <p data-session-status></p>
+    <p id="notice" class="shop-notice" role="status" aria-live="polite"></p>
+    <section id="reviews-panel" class="form-panel" hidden>
+      <h2>Share your experience</h2>
+      <p>Only purchased courses are available. Required fields are marked *.</p>
+      <form id="review-form" novalidate>
+        <div class="form-field"><label for="review-courseId">Purchased course *</label><select id="review-courseId"
+            name="courseId" required aria-describedby="review-courseId-error">
+            <option value="">Select a course</option>
+          </select>
+          <p class="field-error" id="review-courseId-error" data-error="courseId" aria-live="polite"></p>
+        </div>
+        <div class="form-field full-width"><label for="review-text">Your review *</label><textarea id="review-text"
+            name="text" required minlength="20" maxlength="2000" rows="6"
+            aria-describedby="review-text-error"></textarea>
+          <p class="field-error" id="review-text-error" data-error="text" aria-live="polite"></p>
+        </div>
+        <p class="form-hint">20–2000 characters, excluding leading and trailing spaces.</p>
+        <button class="button button-green" type="submit" disabled>Send review</button>
+      </form>
+    </section>
+    <section id="my-reviews" class="form-panel" hidden>
+      <h2>Your reviews</h2>
+      <div id="review-list" class="review-list"></div>
+    </section><a href="account.html">Go to your account</a>
+    <noscript>
+      <p class="catalog-empty">Enable JavaScript to use these forms.</p>
+    </noscript>
+  </main>
+  <footer class="catalog-footer container">
+    <p>Learnico · Build skills at your own pace.</p><a href="catalog.html">Explore courses</a>
+  </footer>
+</body>
+
+</html>
