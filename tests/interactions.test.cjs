@@ -1,0 +1,62 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const { chromium } = require('playwright');
+
+(async () => {
+  const { createApp } = await import('../server/app.mjs');
+  const seed = JSON.parse(fs.readFileSync(require.resolve('../server/seed.json'), 'utf8'));
+  const { app } = createApp(seed);
+  const server = app.listen(3012, '127.0.0.1');
+  await new Promise((resolve, reject) => { server.once('listening', resolve); server.once('error', reject); });
+  let browser;
+  try {
+    browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || 'chrome', headless: true });
+    const page = await browser.newPage({ viewport: { width: 1280, height: 850 } });
+    await page.route('http://127.0.0.1:3010/**', route => route.continue({ url: route.request().url().replace(':3010/', ':3012/') }));
+    const errors = [];
+    page.on('pageerror', error => errors.push(error.message));
+    await page.goto('http://127.0.0.1:3012/index.html', { waitUntil: 'domcontentloaded' });
+    await page.locator('.site-preloader').waitFor({ state: 'hidden' });
+    assert.equal(await page.locator('.slider-slide').count(), 3);
+    await page.click('#slider-next');
+    assert.equal(await page.locator('.slider-status').textContent(), '2 / 3');
+    assert.equal(await page.locator('#gallery-thumbs button').count(), 10);
+    const first = await page.locator('#gallery-photo').getAttribute('src');
+    await page.click('#gallery-random');
+    await page.waitForFunction(previous => document.querySelector('#gallery-photo').getAttribute('src') !== previous, first);
+    const second = await page.locator('#gallery-photo').getAttribute('src');
+    await page.locator('#gallery-thumbs button').first().click();
+    await page.waitForFunction(previous => document.querySelector('#gallery-photo').getAttribute('src') !== previous, second);
+    await page.click('#gallery-play');
+    assert.equal(await page.locator('#gallery-play').getAttribute('aria-pressed'), 'true');
+    await page.click('#gallery-play');
+    assert.equal(await page.locator('#gallery-play').getAttribute('aria-pressed'), 'false');
+    await page.locator('#video-poster').click();
+    await page.locator('#lab9-video video').waitFor({ state: 'visible', timeout: 12000 });
+    assert.match(await page.locator('#lab9-video video').getAttribute('src'), /^blob:/);
+    assert.match(await page.locator('.map-frame').getAttribute('src'), /maps\.google\.com/);
+    assert.equal(await page.locator('[data-parallax]').count(), 3);
+    assert.ok((await page.locator('[data-parallax="-0.12"]').getAttribute('style'))?.includes('--parallax-y'));
+    await page.locator('.stats-row').scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => document.querySelector('[data-count="17000"]').textContent === '17,000+');
+    await page.setViewportSize({ width: 375, height: 700 });
+    await page.locator('.menu-toggle').click();
+    assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'), 'true');
+    assert.ok(await page.locator('.header nav').isVisible());
+    await page.locator('.nav-scrim').click({ position: { x: 10, y: 120 } });
+    assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'), 'false');
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth));
+    await page.goto('http://127.0.0.1:3012/catalog.html', { waitUntil: 'domcontentloaded' });
+    await page.locator('.catalog-card').first().waitFor();
+    await page.locator('.catalog-card img').first().click();
+    assert.ok(await page.locator('.detail-dialog').isVisible());
+    await page.locator('.dialog-close').click();
+    await page.locator('[data-action="cart"]').first().click();
+    await page.locator('.toast').waitFor({ state: 'visible' });
+    assert.deepEqual(errors, []);
+    console.log('PASS: slider, gallery, sound controls, video, map, parallax, counters, burger, details and toast.');
+  } finally {
+    if (browser) await browser.close();
+    await new Promise(resolve => server.close(resolve));
+  }
+})().catch(error => { console.error(error); process.exitCode = 1; });
