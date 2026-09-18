@@ -1,0 +1,197 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const { chromium } = require('playwright');
+
+(async () => {
+  const { createApp, hashPassword } = await import('../server/app.mjs');
+  const seed = JSON.parse(fs.readFileSync(require.resolve('../server/seed.json'), 'utf8'));
+  seed.users = [{ id: 'admin', email: 'admin@learnico.local', nickname: 'Admin', role: 'admin', passwordHash: hashPassword('Admin9!Study') }];
+  for (const key of ['cart', 'favorites', 'orders', 'feedback']) seed[key] = [];
+  const { app, db } = createApp(seed);
+  const server = app.listen(3011, '127.0.0.1');
+  await new Promise((resolve, reject) => { server.once('listening', resolve); server.once('error', reject); });
+  let browser;
+  try {
+    browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || 'chrome', headless: true });
+    const page = await browser.newPage();
+    await page.route('http://127.0.0.1:3010/**', route => route.continue({ url: route.request().url().replace(':3010/', ':3011/') }));
+    const errors = [];
+    page.on('pageerror', error => errors.push(error.message));
+    const go = name => page.goto('http://127.0.0.1:3011/' + name + '.html');
+    await go('account');
+    await page.waitForTimeout(200);
+    await page.evaluate(() => { window.__documentMarker = crypto.randomUUID(); });
+    const documentMarker = () => page.evaluate(() => window.__documentMarker);
+    const accountMarker = await documentMarker();
+    assert.ok(await page.locator('#register-form [type="submit"]').isDisabled());
+    await page.fill('#register-firstName', 'Test');
+    await page.fill('#register-lastName', 'Learner');
+    await page.fill('#register-birthDate', '2020-01-01');
+    await page.fill('#register-phone', '+79991234567');
+    await page.fill('#register-email', 'bad-email');
+    await page.fill('#register-password', 'Qwerty123!');
+    await page.fill('#register-confirmPassword', 'not-matching');
+    await page.locator('#register-confirmPassword').press('Tab');
+    assert.ok(await page.locator('#register-phone-error').textContent());
+    assert.ok(await page.locator('#register-email-error').textContent());
+    assert.ok(await page.locator('#register-birthDate-error').textContent());
+    assert.match(await page.locator('#register-password-error').textContent(), /TOP-100/);
+    await page.fill('#register-phone', '+375291234567');
+    assert.equal(await page.locator('#register-phone-error').textContent(), '');
+    await page.fill('#register-email', 'learner@example.test');
+    await page.fill('#register-birthDate', '2000-01-01');
+    await page.fill('#register-password', 'Learnico9!Study');
+    await page.fill('#register-confirmPassword', '');
+    const pasteBlocked = await page.locator('#register-confirmPassword').evaluate(input => {
+      const event = new Event('paste', { bubbles: true, cancelable: true });
+      input.dispatchEvent(event);
+      return event.defaultPrevented;
+    });
+    assert.ok(pasteBlocked);
+    await page.fill('#register-confirmPassword', 'Learnico9!Study');
+    await page.waitForFunction(() => document.querySelector('#register-nickname').value && !document.querySelector('#register-nickname-error').textContent);
+    for (let i = 0; i < 4; i++) {
+      await page.waitForTimeout(150);
+      await page.click('#generate-nickname');
+      await page.waitForTimeout(150);
+    }
+    assert.equal(await page.locator('#register-nickname').getAttribute('readonly'), null);
+    await page.fill('#register-nickname', 'Admin');
+    await page.waitForFunction(() => document.querySelector('#register-nickname-error').textContent.includes('taken'));
+    await page.fill('#register-nickname', 'TestLearner');
+    await page.waitForFunction(() => document.querySelector('#register-nickname').getAttribute('aria-busy') === 'false' && !document.querySelector('#register-nickname-error').textContent);
+    assert.ok(await page.locator('#accepted-terms').isDisabled());
+    await page.click('#agreement-toggle');
+    await page.locator('#agreement-text').evaluate(node => { node.scrollTop = node.scrollHeight; });
+    await page.waitForFunction(() => !document.querySelector('#accepted-terms').disabled);
+    await page.check('#accepted-terms');
+    await page.waitForFunction(() => !document.querySelector('#register-form [type="submit"]').disabled);
+    await page.click('#register-form [type="submit"]');
+    await page.locator('#account-summary').waitFor({ state: 'visible' });
+    assert.equal(await documentMarker(), accountMarker);
+    assert.ok(await page.locator('[data-admin-link]').isHidden());
+    await go('reviews');
+    await page.locator('#reviews-panel').waitFor({ state: 'visible' });
+    assert.ok(await page.locator('#review-form [type="submit"]').isDisabled());
+    await go('catalog');
+    await page.evaluate(() => { window.__documentMarker = crypto.randomUUID(); });
+    const catalogMarker = await documentMarker();
+    await page.locator('[data-id="1"] [data-action="favorite"]').click();
+    await page.waitForFunction(() => document.querySelector('#notice').textContent.includes('saved to favorites'));
+    assert.equal(await documentMarker(), catalogMarker);
+    await page.locator('[data-id="1"] [data-action="cart"]').click();
+    await page.waitForFunction(() => document.querySelector('#notice').textContent.includes('added to cart'));
+    assert.equal(await documentMarker(), catalogMarker);
+    await go('favorites');
+    await page.evaluate(() => { window.__documentMarker = crypto.randomUUID(); });
+    const favoritesMarker = await documentMarker();
+    await page.locator('[data-action="remove"]').first().click();
+    await page.waitForFunction(() => document.querySelector('#collection-status').textContent === '0 items');
+    assert.equal(await documentMarker(), favoritesMarker);
+    await go('cart');
+    await page.waitForFunction(() => document.querySelector('#cart-total').textContent === '$24.00');
+    await page.evaluate(() => { window.__documentMarker = crypto.randomUUID(); });
+    const cartMarker = await documentMarker();
+    await page.locator('input[aria-label^="Quantity"]').fill('2');
+    await page.locator('input[aria-label^="Quantity"]').press('Tab');
+    await page.waitForFunction(() => document.querySelector('#cart-total').textContent === '$48.00');
+    assert.equal(await documentMarker(), cartMarker);
+    await page.locator('input[aria-label^="Quantity"]').fill('1');
+    await page.locator('input[aria-label^="Quantity"]').press('Tab');
+    await page.waitForFunction(() => document.querySelector('#cart-total').textContent === '$24.00');
+    await page.click('#checkout');
+    await page.waitForFunction(() => document.querySelector('#notice').textContent.includes('order history'));
+    assert.equal(await documentMarker(), cartMarker);
+    assert.equal(db.get('orders').value().length, 1);
+    assert.equal(db.get('cart').value().length, 0);
+    await go('reviews');
+    await page.locator('#reviews-panel').waitFor({ state: 'visible' });
+    await page.selectOption('#review-courseId', '1');
+    await page.fill('#review-text', 'short');
+    assert.ok(await page.locator('#review-form [type="submit"]').isDisabled());
+    await page.fill('#review-text', 'This course helped me learn responsive design.');
+    await page.evaluate(() => { window.__documentMarker = crypto.randomUUID(); });
+    const reviewMarker = await documentMarker();
+    await page.click('#review-form [type="submit"]');
+    await page.waitForFunction(() => document.querySelector('#review-list').textContent.includes('responsive design'));
+    assert.equal(await documentMarker(), reviewMarker);
+    for (const name of ['index', 'catalog', 'favorites', 'cart', 'account', 'reviews', 'admin']) {
+      await go(name);
+      await page.waitForTimeout(150);
+      for (const width of [280, 320, 390, 600, 768, 1024, 1280, 1440]) {
+        await page.setViewportSize({ width, height: 850 });
+        await page.waitForTimeout(60);
+        const sizes = await page.evaluate(() => [document.documentElement.clientWidth, document.documentElement.scrollWidth]);
+        assert.ok(sizes[1] <= sizes[0], name + ' at ' + width + ': ' + sizes);
+      }
+    }
+    await go('account');
+    await page.evaluate(() => { window.__documentMarker = crypto.randomUUID(); });
+    const sessionMarker = await documentMarker();
+    await page.click('#logout');
+    await page.locator('#login-form').waitFor({ state: 'visible' });
+    assert.equal(await documentMarker(), sessionMarker);
+    await page.selectOption('#register-passwordMode', 'generated');
+    assert.equal((await page.inputValue('#register-password')).length, 16);
+    assert.ok(await page.locator('#register-confirmPassword').isDisabled());
+    assert.ok(await page.locator('#generated-confirmation').isVisible());
+    await page.fill('#login-email', 'admin@learnico.local');
+    await page.fill('#login-password', 'Admin9!Study');
+    await page.click('#login-form [type="submit"]');
+    await page.locator('[data-admin-link]').waitFor({ state: 'visible' });
+    assert.equal(await documentMarker(), sessionMarker);
+    await go('index');
+    await page.locator('[data-admin-link]').waitFor({ state: 'visible' });
+    for (const width of [280, 320, 768, 1280]) {
+      await page.setViewportSize({ width, height: 850 });
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), 'admin home layout ' + width);
+    }
+    await go('reviews');
+    await page.waitForFunction(() => document.querySelector('#notice').textContent.includes('Administrators'));
+    assert.ok(await page.locator('#reviews-panel').isHidden());
+    await go('admin');
+    await page.locator('#admin-panel').waitFor({ state: 'visible' });
+    await page.evaluate(() => { window.__documentMarker = crypto.randomUUID(); });
+    const adminMarker = await documentMarker();
+    await page.selectOption('#filter-course', '1');
+    await page.waitForFunction(() => document.querySelectorAll('.review-item').length === 1);
+    const userId = db.get('users').find({ nickname: 'TestLearner' }).value().id;
+    await page.selectOption('#filter-user', userId);
+    await page.waitForFunction(() => document.querySelectorAll('.review-item').length === 1);
+    await page.check('.review-item input[type="checkbox"]');
+    await page.click('.review-item button');
+    await page.waitForFunction(() => document.querySelector('#moderation-status').textContent.includes('No reviews'));
+    await page.click('#open-course-dialog');
+    for (const [name, value] of Object.entries({ title: 'Browser test course', category: 'Testing', description: 'A course created by the browser test.', price: '9.99', duration: '4', rating: '4.5', image: 'images/course-1.png' })) await page.fill('#course-' + name, value);
+    await page.selectOption('#course-level', 'Beginner');
+    await page.click('#save-course');
+    await page.waitForFunction(() => document.querySelector('#notice').textContent === 'Course added.');
+    const added = db.get('courses').find({ title: 'Browser test course' }).value();
+    await page.click('#open-course-dialog');
+    await page.selectOption('#edit-course', String(added.id));
+    await page.fill('#course-price', '19.99');
+    await page.click('#save-course');
+    await page.waitForFunction(() => document.querySelector('#notice').textContent === 'Course updated.');
+    assert.equal(db.get('courses').find({ id: added.id }).value().price, 19.99);
+    await page.click('#open-course-dialog');
+    await page.selectOption('#edit-course', String(added.id));
+    await page.check('#delete-course-form input');
+    await page.click('#delete-course-form button');
+    await page.waitForFunction(() => document.querySelector('#notice').textContent.includes('Course deleted.'));
+    assert.equal(db.get('courses').find({ id: added.id }).value(), undefined);
+    assert.equal(await documentMarker(), adminMarker);
+    for (const name of ['admin', 'account']) {
+      await go(name);
+      if (name === 'admin') await page.locator('#admin-panel').waitFor({ state: 'visible' });
+      for (const width of [280, 320, 768, 1280]) {
+        await page.setViewportSize({ width, height: 850 });
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), name + ' admin layout ' + width);
+      }
+    }
+    assert.deepEqual(errors, []);
+    console.log('PASS: account, catalog, cart and admin updates without page reload; 68 responsive layouts.');
+  } finally {
+    if (browser) await browser.close();
+    await new Promise(resolve => server.close(resolve));
+  }
+})().catch(error => { console.error(error); process.exitCode = 1; });
