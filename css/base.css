@@ -1,0 +1,107 @@
+:root {
+  --color-ink: #1f2937;
+  --color-text: #4b5563;
+  --color-surface: #fff;
+  --color-dark: #00353b;
+  --color-primary: #22a45a;
+  --color-primary-dark: #158e5e;
+  --color-accent: #fcd8ca;
+  --page-width: 1440px;
+  --content-width: 1280px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  min-width: 0;
+  background: var(--color-dark);
+  color: var(--color-ink);
+  font-family: 'DM Sans', Arial, sans-serif;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+figure,
+blockquote {
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3 {
+  font-family: Poppins, Arial, sans-serif;
+  font-weight: 400;
+}
+
+h1 {
+  font-size: 56px;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 48px;
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: 24px;
+  line-height: 1.4;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:focus,
+button:focus,
+input:focus {
+  outline: 2px solid #d29b11;
+  outline-offset: 3px;
+}
+
+.page {
+  width: 100%;
+  min-width: 0;
+  background: var(--color-surface);
+}
+
+.container {
+  width: var(--content-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dark {
+  background: var(--color-dark);
+  color: var(--color-surface);
+}

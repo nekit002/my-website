@@ -1,0 +1,120 @@
+.button {
+  display: inline-block;
+  padding: 12px 24px;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  background: #1f2937;
+  color: #fff;
+  line-height: 24px;
+  white-space: nowrap;
+  text-align: center;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: #374151;
+  border-color: #374151;
+  text-decoration: none;
+}
+
+.button:active {
+  background: #111827;
+}
+
+.button-green {
+  background: #22a45a;
+  border-color: #22a45a;
+}
+
+.button-green:hover {
+  background: #158e5e;
+  border-color: #158e5e;
+}
+
+.button-white {
+  background: #fff;
+  border-color: #fff;
+  color: #1f2937;
+}
+
+.button-white:hover {
+  background: #fcd8ca;
+  border-color: #fcd8ca;
+}
+
+.plain-button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.plain-button:hover {
+  text-decoration: underline;
+  color: #22a45a;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tag {
+  display: inline-block;
+  border-radius: 4px;
+  padding: 4px 8px;
+  background: #fcd8ca;
+  color: #1f2937;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.material-icons {
+  display: inline-block;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.icon-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #158e5e;
+}
+
+.icon-circle .material-icons {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  color: white;
+}
+
+.picture {
+  display: block;
+  flex: none;
+  background: #e5e7eb;
+  overflow: hidden;
+  color: #4b5563;
+  object-fit: cover;
+}
+
+.rounded {
+  border-radius: 24px;
+}
