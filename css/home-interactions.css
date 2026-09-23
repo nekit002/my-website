@@ -27,7 +27,7 @@
   width: clamp(160px, 22vw, 320px);
   aspect-ratio: 1;
   top: 4%;
-  left: 4%;
+  left: max(4%, calc(50% - 720px));
   border: 1px solid #ffffff35;
   border-radius: 50%;
 }
@@ -36,7 +36,7 @@
   width: clamp(80px, 12vw, 180px);
   aspect-ratio: 1;
   top: 44%;
-  right: 6%;
+  right: max(6%, calc(50% - 720px));
   border: 24px solid #145c5e88;
   border-radius: 50%;
 }
@@ -44,7 +44,7 @@
 .parallax-front {
   width: clamp(80px, 14vw, 200px);
   height: 18px;
-  right: 22%;
+  right: max(22%, calc(50% - 720px));
   bottom: 11%;
   border-radius: 99px;
   background: #25a66b66;

@@ -181,7 +181,6 @@
 
 .about h2 {
   margin-top: 11px;
-  white-space: nowrap;
 }
 
 .about p {
@@ -453,10 +452,6 @@
 
 .stars {
   color: #e0b420;
-}
-
-.review .stars {
-  color: #1f2937;
 }
 
 .review-author {

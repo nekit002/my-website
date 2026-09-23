@@ -149,7 +149,8 @@ videoButton.addEventListener('click', async () => {
     context.fillRect(0, 270, 640, 90);
     context.fillStyle = '#fff';
     context.font = 'bold 32px sans-serif';
-    context.fillText('Learnico · Start learning', 28, 325);
+    const videoText = document.documentElement.lang === 'ru' ? 'Learnico · Начните учиться' : 'Learnico · Start learning';
+    context.fillText(videoText, 28, 325);
     if (progress < 1) requestAnimationFrame(draw);
     else recorder.stop();
   }
@@ -176,7 +177,7 @@ function animateCounter(node) {
   const start = performance.now();
   function tick(now) {
     const progress = Math.min(1, (now - start) / 1000);
-    node.textContent = Math.round(target * (1 - (1 - progress) ** 3)).toLocaleString('en-US') + suffix;
+    node.textContent = Math.round(target * (1 - (1 - progress) ** 3)).toLocaleString(document.documentElement.lang === 'ru' ? 'ru-RU' : 'en-US') + suffix;
     if (progress < 1) requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
@@ -185,7 +186,7 @@ if ('IntersectionObserver' in window) {
   const counterObserver = new IntersectionObserver(entries => {
     for (const entry of entries) if (entry.isIntersecting) {
       if (motionAllowed) animateCounter(entry.target);
-      else entry.target.textContent = Number(entry.target.dataset.count).toLocaleString('en-US') + (entry.target.dataset.suffix || '');
+      else entry.target.textContent = Number(entry.target.dataset.count).toLocaleString(document.documentElement.lang === 'ru' ? 'ru-RU' : 'en-US') + (entry.target.dataset.suffix || '');
       counterObserver.unobserve(entry.target);
     }
   }, { threshold: 0.4 });
