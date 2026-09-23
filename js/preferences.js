@@ -315,6 +315,7 @@ function translateAll() {
   document.title = language === 'ru' ? translations[originalTitle] || originalTitle : originalTitle;
   document.documentElement.lang = language;
   document.documentElement.dataset.theme = theme;
+  for (const img of document.querySelectorAll('[data-theme-light][data-theme-dark]')) img.src = theme === 'dark' ? img.dataset.themeDark: img.dataset.themeLight;
   for (const button of document.querySelectorAll('[data-language]')) button.setAttribute('aria-pressed', String(button.dataset.language === language));
   for (const button of document.querySelectorAll('[data-theme-toggle]')) {
     const name = theme === 'dark' ? 'Light theme' : 'Dark theme';
